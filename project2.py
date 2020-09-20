@@ -53,9 +53,13 @@ months = {"JAN" : 1, "FEB":2, "MAR":3, "APR":4, "MAY":5, "JUN":6, "JUL":7, "AUG"
 individuals = {}
 families = {}
 
-x = PrettyTable()
-x.field_names = ["ID","Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
-print(x)
+individuals = PrettyTable()
+individuals.field_names = ["ID","Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+print(individuals)
+
+families = PrettyTable()
+families.field_names = ["ID","Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children"]
+print(families)
 
 for element in root_elements:
     age = 0
