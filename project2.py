@@ -1,8 +1,10 @@
-#Team 3
+#Team 2
 from gedcom.element.individual import IndividualElement
 from gedcom.parser import Parser
 import datetime
 from prettytable import PrettyTable
+from collections import OrderedDict
+from individualClass import individualClass as indiClass
 
 def from_dob_to_age(born):
     today = datetime.date.today()
@@ -12,7 +14,17 @@ def from_dob_to_death(born,death):
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 
+def printTablesIndiData(indiDict_obj):
+    indiTable = PrettyTable()
+    familyTable = PrettyTable()
 
+    indiTable.field_names = ['ID', 'Name', 'Gender', 'Birthday', 'Age', 'Alive', 'Death', 'Child', 'Spouse']
+
+    for id in indiDict_obj:
+        individualData = indiDict_obj[id]
+        indiTable.add_row(individualData.Get_details())
+
+    print (indiTable)
 
 
 # Path to your `.ged` file
@@ -32,77 +44,97 @@ root_elements = gedcom_parser.get_element_list()
         tag = "Y"
     else:
         tag = "N"
-            
+
     print ("-->" + str(element))
     print ("<-- |" + str(element.get_level()) + "|" + (element.get_tag())+ "|" + tag+ "|" + str(element.get_value()) + "|")
 '''
 info = {"INDI": [], "FAM":[]}
-#for element in root_elements:          
-#    print (str(element.get_tag()))
-#    if str(element.get_tag()) == "INDI" or str(element.get_tag()) =="FAM":
-#        if element.get_tag() == "INDI" and len(info[element.get_tag()]) > 5000:
-#            raise ValueError("Too many individuals in file")
-#        if element.get_tag() == "FAM" and len(info[element.get_tag()]) >1000:
-#            raise ValueError("Too many families in file")
-#        print("test")
-#        info[str(element.get_tag())] = info[str(element.get_tag())]+ [(element.get_element_list())] 
-        
-#print (info)
+
+for element in root_elements:
+   if str(element.get_tag()) == "INDI" or str(element.get_tag()) =="FAM":
+       if element.get_tag() == "INDI" and len(info[element.get_tag()]) > 5000:
+           raise ValueError("Too many individuals in file")
+       if element.get_tag() == "FAM" and len(info[element.get_tag()]) >1000:
+           raise ValueError("Too many families in file")
 
 months = {"JAN" : 1, "FEB":2, "MAR":3, "APR":4, "MAY":5, "JUN":6, "JUL":7, "AUG":8, "SEP":9,"OCT":10,"NOV":11, "DEC":12}
-individuals = {}
-families = {}
 
-individuals = PrettyTable()
-individuals.field_names = ["ID","Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
-print(individuals)
-
-families = PrettyTable()
-families.field_names = ["ID","Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children"]
-print(families)
+# Individual dictionary
+indiDict = OrderedDict()
+myTag = ""
 
 for element in root_elements:
     age = 0
-    print(element.get_value())
-    #if(element.get_level() == 0 and element.get_tag() == "INDI"):
-    #    individuals[] = 
-    '''if isinstance(element, IndividualElement):
+
+    # Fetch Individual ID details
+    if(element.get_level() == 0 and element.get_tag() == "INDI"):
+        individualString = element.to_gedcom_string()
+        individualString = individualString.replace('@','').strip().split(" ")
+
+        #Fetch Individual ID tag
+        myTag = individualString[1]
+
+        indiDict[myTag] = indiClass(myTag)
+        indiDict[myTag].Set_ID(myTag)
+
+    # Fetch ans set Child ID details for individual
+    if (element.get_level() == 1) and element.get_tag() == "FAMC" :
+        childString = element.to_gedcom_string()
+        childString = childString.replace('@','').strip().split(" ")
+        indiDict[myTag].Set_child(childString[2])
+
+    # Fetch ans set Spouse ID details for individual
+    if (element.get_level() == 1) and element.get_tag() == "FAMS" :
+        spouseString = element.to_gedcom_string()
+        spouseString = spouseString.replace('@','').strip().split(" ")
+        indiDict[myTag].Set_spouse(spouseString[2])
+
+    if isinstance(element, IndividualElement):
+
+        # Fetch and set the name
         (first, last) = element.get_name()
-        #print(type(gedcom_parser))
-        #families = gedcom_parser.get_families(element, "FAMS")
-        #print(families)
+        indiDict[myTag].Set_name(str(first+ " " +last))
+
+        # Fetch the Gender and set the gender
+        indiDict[myTag].Set_gender(element.get_gender())
+
+        # Check if individual is alive
         if(element.is_deceased() == True):
-            
+
+            # Set Alive status to false
+            indiDict[myTag].Set_alive(False)
+
+            # Fetch Birth and death dates
             bday = element.get_birth_data()[0]
-            
             death = element.get_death_data()[0]
+
+            # Format Dates in Day Month and Year
             bday = bday.split(" ")
-            #print (months[bday[1]])
             bday = datetime.date(int(bday[2]),int(months[bday[1]]), int(bday[0]))
             death = death.split(" ")
             death = datetime.date(int(death[2]),int(months[death[1]]), int(death[0]))
-            #age = from_dob_to_age(dob)
-            #age = from_dob_to_age(dob)
+
+            # Set Birthday
+            indiDict[myTag].Set_birthday(bday)
+            # Set Death day
+            indiDict[myTag].Set_death(death)
+            # Calculate the age
             age = from_dob_to_death(bday, death)
-            
-        else:
-            #dob = datetime.date(element.get_birth_data()[0])
-            dob = element.get_birth_data()[0].split(" ")
-            dob = datetime.date(int(dob[2]),int(months[dob[1]]), int(dob[0]))
-            age = from_dob_to_age(dob)
-        info[str(element.get_tag())] = info[str(element.get_tag())] + [(first+ " " + last, element.get_gender(), element.get_birth_data()[0], age, "Alive: " + str(not element.is_deceased()))] 
-        if  (element.is_deceased()):
-            info[str(element.get_tag())]= info[str(element.get_tag())] + ["Death Date: " + element.get_death_data()[0]]
-        else:
-            info[str(element.get_tag())]= info[str(element.get_tag())] + ["NA"]
+            # Set Age
+            indiDict[myTag].Set_age(age)
 
-        if (element.is_child()):
-            info[str(element.get_tag())] = info[str(element.get_tag())] + ["Child: " + str(element.is_child())] # have to check for id
         else:
-            info[str(element.get_tag())] = info[str(element.get_tag())] + ["Child: " + "Not a child"]
-        
-                
-print(info)
+            # Set Alive status to true
+            indiDict[myTag].Set_alive(True)
+            # Fetch Birth dates
+            bday = element.get_birth_data()[0].split(" ")
+            bday = datetime.date(int(bday[2]),int(months[bday[1]]), int(bday[0]))
+            # Set Birthday
+            indiDict[myTag].Set_birthday(bday)
+            # Calculate the age
+            age = from_dob_to_age(bday)
+            # Set Age
+            indiDict[myTag].Set_age(age)
 
-#level, tag, valid?, arguments
-'''
+# Print Each Individual details
+printTablesIndiData(indiDict)
