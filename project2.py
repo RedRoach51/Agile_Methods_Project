@@ -1,6 +1,8 @@
+#Team 3
 from gedcom.element.individual import IndividualElement
 from gedcom.parser import Parser
 import datetime
+from prettytable import PrettyTable
 
 def from_dob_to_age(born):
     today = datetime.date.today()
@@ -14,7 +16,7 @@ def from_dob_to_death(born,death):
 
 
 # Path to your `.ged` file
-file_path ='C:\\Users\\Pratim\\Desktop\\FamilyTree-suppada.ged'
+file_path ='FamilyTree.ged'
 
 # Initialize the parser
 gedcom_parser = Parser()
@@ -25,7 +27,7 @@ gedcom_parser.parse_file(file_path)
 root_elements = gedcom_parser.get_element_list()
 
 # Iterate through allelements
-for element in root_elements:
+'''for element in root_elements:
     if element.get_tag == "INDI" or element.get_tag == "FAM":
         tag = "Y"
     else:
@@ -33,7 +35,7 @@ for element in root_elements:
             
     print ("-->" + str(element))
     print ("<-- |" + str(element.get_level()) + "|" + (element.get_tag())+ "|" + tag+ "|" + str(element.get_value()) + "|")
-
+'''
 info = {"INDI": [], "FAM":[]}
 #for element in root_elements:          
 #    print (str(element.get_tag()))
@@ -48,19 +50,30 @@ info = {"INDI": [], "FAM":[]}
 #print (info)
 
 months = {"JAN" : 1, "FEB":2, "MAR":3, "APR":4, "MAY":5, "JUN":6, "JUL":7, "AUG":8, "SEP":9,"OCT":10,"NOV":11, "DEC":12}
+individuals = {}
+families = {}
 
+x = PrettyTable()
+x.field_names = ["ID","Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+print(x)
 
 for element in root_elements:
     age = 0
-    if isinstance(element, IndividualElement):
+    print(element.get_value())
+    #if(element.get_level() == 0 and element.get_tag() == "INDI"):
+    #    individuals[] = 
+    '''if isinstance(element, IndividualElement):
         (first, last) = element.get_name()
+        #print(type(gedcom_parser))
+        #families = gedcom_parser.get_families(element, "FAMS")
+        #print(families)
         if(element.is_deceased() == True):
             
             bday = element.get_birth_data()[0]
             
             death = element.get_death_data()[0]
             bday = bday.split(" ")
-            print (months[bday[1]])
+            #print (months[bday[1]])
             bday = datetime.date(int(bday[2]),int(months[bday[1]]), int(bday[0]))
             death = death.split(" ")
             death = datetime.date(int(death[2]),int(months[death[1]]), int(death[0]))
@@ -88,3 +101,4 @@ for element in root_elements:
 print(info)
 
 #level, tag, valid?, arguments
+'''
