@@ -95,7 +95,6 @@ for element in root_elements:
             info[str(element.get_tag())]= info[str(element.get_tag())] + ["Death Date: " + element.get_death_data()[0]]
         else:
             info[str(element.get_tag())]= info[str(element.get_tag())] + ["NA"]
-
         if (element.is_child()):
             info[str(element.get_tag())] = info[str(element.get_tag())] + ["Child: " + str(element.is_child())] # have to check for id
         else:
@@ -103,6 +102,5 @@ for element in root_elements:
         
                 
 print(info)
-
 #level, tag, valid?, arguments
 '''
