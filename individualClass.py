@@ -8,14 +8,14 @@ class individualClass(object):
         self.Age = Age
         self.Alive = Alive
         self.Death = Death
-        self.Child = Child
-        self.Spouse = Spouse
+        self.Child = []
+        self.Spouse = []
 
     def Set_ID(self, ID):
         self.ID = ID
 
     def Set_name(self, Name):
-        self.Name = Name 
+        self.Name = Name
 
     def Set_gender(self, Gender):
         self.Gender = Gender
@@ -32,11 +32,11 @@ class individualClass(object):
     def Set_death(self, Death):
         self.Death = Death
 
-    def Set_child(self, Child):
-        self.Child = Child
-        
-    def Set_spouse(self, Spouse):
-        self.Spouse = Spouse
+    def Set_child(self, Child_arg):
+        self.Child.append(Child_arg)
+
+    def Set_spouse(self, Spouse_arg):
+        self.Spouse.append(Spouse_arg)
 
     def Get_ID(self):
         return self.ID
@@ -66,8 +66,11 @@ class individualClass(object):
         return self.Spouse
 
     def Get_details(self):
-        return [self.ID, self.Name, self.Gender, self.Birthday, self.Age, self.Alive, self.Death, self.Child, self.Spouse]
-
-
-
-
+        if(self.Child == [] and self.Spouse == []):
+            return [self.ID, self.Name, self.Gender, self.Birthday, self.Age, self.Alive, self.Death, 'NA', 'NA']
+        elif(self.Spouse == []):
+            return [self.ID, self.Name, self.Gender, self.Birthday, self.Age, self.Alive, self.Death, self.Child, 'NA']
+        elif(self.Child == []):
+            return [self.ID, self.Name, self.Gender, self.Birthday, self.Age, self.Alive, self.Death, 'NA', self.Spouse]
+        else:
+            return [self.ID, self.Name, self.Gender, self.Birthday, self.Age, self.Alive, self.Death, self.Child, self.Spouse]
