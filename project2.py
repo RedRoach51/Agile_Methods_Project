@@ -15,13 +15,13 @@ def from_dob_to_death(born,death):
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 
-def printTablesIndiData(indiDict_obj, famDict_obj):
+def printTablesData(indiDict_obj, famDict_obj):
     indiTable = PrettyTable()
     familyTable = PrettyTable()
 
     indiTable.field_names = ['ID', 'Name', 'Gender', 'Birthday', 'Age', 'Alive', 'Death', 'Child', 'Spouse']
     familyTable.field_names = ['ID','Married','Divorced','Husband ID', 'Husband Name', 'Wife ID','Wife Name', 'Children']
-    
+
     for id in indiDict_obj:
         individualData = indiDict_obj[id]
         indiTable.add_row(individualData.Get_details())
@@ -35,7 +35,7 @@ def printTablesIndiData(indiDict_obj, famDict_obj):
 
 
 # Path to your `.ged` file
-file_path ='C:/Users/ztyle/Documents/SSW 555/SSW_555_Project/Agile_Methods_Project/FamilyTree.ged'
+file_path ='FamilyTree.ged'
 #file_path ='gedcom'
 
 # Initialize the parser
@@ -77,7 +77,7 @@ isMarried = False
 isDivorced = False
 for element in root_elements:
     age = 0
-    
+
 
     # Fetch Individual ID details
     if(element.get_level() == 0 and element.get_tag() == "INDI"):
@@ -187,7 +187,7 @@ for element in root_elements:
         child = child.replace('@','').strip().split(" ")[2]
         children.add(child)
         famDict[famTag].Set_children(set(children))
-        
-            
+
+
 # Print Each Individual details
-printTablesIndiData(indiDict, famDict)
+printTablesData(indiDict, famDict)
