@@ -35,7 +35,7 @@ def printTablesIndiData(indiDict_obj, famDict_obj):
 
 
 # Path to your `.ged` file
-file_path ='FamilyTree.ged'
+file_path ='C:/Users/ztyle/Documents/SSW 555/SSW_555_Project/Agile_Methods_Project/FamilyTree.ged'
 #file_path ='gedcom'
 
 # Initialize the parser
