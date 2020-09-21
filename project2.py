@@ -6,6 +6,7 @@ from prettytable import PrettyTable
 from collections import OrderedDict
 from individualClass import individualClass as indiClass
 from familyClass import familyClass
+import sys
 
 def from_dob_to_age(born):
     today = datetime.date.today()
@@ -178,6 +179,8 @@ for element in root_elements:
         children.add(child)
         famDict[famTag].Set_children(set(children))
 
-
+# Output the results
+sys.stdout = open("Output_FamilyTree.txt", "w")
 # Print Each Individual details
 printTablesData(indiDict, famDict)
+sys.stdout.close()
