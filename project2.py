@@ -152,14 +152,12 @@ for element in root_elements:
     if(element.get_level() == 0 and element.get_tag() == "FAM"):
         children = set()
         familyString = element.to_gedcom_string()
-        #print(familyString)
         familyString = familyString.replace('@','').strip().split(" ")
         famTag = familyString[1]
         famDict[famTag] = familyClass(famTag)
         famDict[famTag].Set_ID(famTag)
     if(element.get_level() == 1 and element.get_tag() == "MARR"):
         isMarried = True
-        #print(isMarried)
     if(isMarried and element.get_tag()=="DATE" and element.get_level()==2):
         marriedDay = element.get_value()
         marriedDay = marriedDay.split(" ")
