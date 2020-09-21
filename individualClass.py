@@ -1,6 +1,6 @@
 
 class individualClass(object):
-    def __init__(self, ID = 'NA', Name = 'NA', Gender = 'NA', Birthday = 'NA', Age = '0', Alive = 'NA', Death = 'NA', Child = 'NA', Spouse = 'NA'):
+    def __init__(self, ID = 'NA', Name = 'NA', Gender = 'NA', Birthday = 'NA', Age = '0', Alive = 'NA', Death = 'NA', Child =[], Spouse = []):
         self.ID =  ID
         self.Name = Name
         self.Gender = Gender

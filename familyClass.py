@@ -1,6 +1,6 @@
 
 class familyClass(object):
-    def __init__(self, ID = 'NA', Married= 'NA', Divorced = 'NA', HusbandID = 'NA', HusbandName = '0', WifeID = 'NA', WifeName = 'NA', Children = 'NA'):
+    def __init__(self, ID = 'NA', Married= 'NA', Divorced = 'NA', HusbandID = 'NA', HusbandName = '0', WifeID = 'NA', WifeName = 'NA', Children = {}):
         self.ID =  ID
         self.Married = Married
         self.Divorced = Divorced
@@ -22,8 +22,8 @@ class familyClass(object):
     def Set_husbandID(self, HusbandID):
         self.HusbandID = HusbandID
 
-    def Set_husbandName(self, HusbandName):
-        self.Age = Age
+    def Set_husbandName(self, HusbandName): 
+        self.HusbandName = HusbandName
 
     def Set_wifeID(self, WifeID):
         self.WifeID = WifeID
@@ -47,7 +47,7 @@ class familyClass(object):
         return self.HusbandID
 
     def Get_husbandName(self):
-        return self.husbandName
+        return self.HusbandName
 
     def Get_wifeID(self):
         return self.WifeID
@@ -59,5 +59,5 @@ class familyClass(object):
         return self.Children
 
     def Get_details(self):
-        return [self.Married, self.Divorced, self.HusbandID, self.HusbandName, self.WifeID, self.WifeName, self.Children]
+        return [self.ID, self.Married, self.Divorced, self.HusbandID, self.HusbandName, self.WifeID, self.WifeName, self.Children]
 

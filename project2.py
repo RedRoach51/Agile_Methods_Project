@@ -5,6 +5,7 @@ import datetime
 from prettytable import PrettyTable
 from collections import OrderedDict
 from individualClass import individualClass as indiClass
+from familyClass import familyClass
 
 def from_dob_to_age(born):
     today = datetime.date.today()
@@ -14,21 +15,27 @@ def from_dob_to_death(born,death):
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 
-def printTablesIndiData(indiDict_obj):
+def printTablesIndiData(indiDict_obj, famDict_obj):
     indiTable = PrettyTable()
     familyTable = PrettyTable()
 
     indiTable.field_names = ['ID', 'Name', 'Gender', 'Birthday', 'Age', 'Alive', 'Death', 'Child', 'Spouse']
-
+    familyTable.field_names = ['ID','Married','Divorced','Husband ID', 'Husband Name', 'Wife ID','Wife Name', 'Children']
+    
     for id in indiDict_obj:
         individualData = indiDict_obj[id]
         indiTable.add_row(individualData.Get_details())
+    for id in famDict_obj:
+        famData = famDict_obj[id]
+        familyTable.add_row(famData.Get_details())
 
     print (indiTable)
+    print (familyTable)
 
 
 # Path to your `.ged` file
-file_path ='FamilyTree.ged'
+#file_path ='FamilyTree.ged'
+file_path ='gedcom'
 
 # Initialize the parser
 gedcom_parser = Parser()
@@ -63,8 +70,13 @@ months = {"JAN" : 1, "FEB":2, "MAR":3, "APR":4, "MAY":5, "JUN":6, "JUL":7, "AUG"
 indiDict = OrderedDict()
 myTag = ""
 
+famDict = OrderedDict()
+famTag = ""
+isMarried = False
+isDivorced = False
 for element in root_elements:
     age = 0
+    
 
     # Fetch Individual ID details
     if(element.get_level() == 0 and element.get_tag() == "INDI"):
@@ -136,5 +148,47 @@ for element in root_elements:
             # Set Age
             indiDict[myTag].Set_age(age)
 
+    if(element.get_level() == 0 and element.get_tag() == "FAM"):
+        children = set()
+        familyString = element.to_gedcom_string()
+        #print(familyString)
+        familyString = familyString.replace('@','').strip().split(" ")
+        famTag = familyString[1]
+        famDict[famTag] = familyClass(famTag)
+        famDict[famTag].Set_ID(famTag)
+    if(element.get_level() == 1 and element.get_tag() == "MARR"):
+        isMarried = True
+        #print(isMarried)
+    if(isMarried and element.get_tag()=="DATE" and element.get_level()==2):
+        isMarried = False
+        marriedDay = element.get_value()
+        marriedDay = marriedDay.split(" ")
+        marriedDay = datetime.date(int(marriedDay[2]),int(months[marriedDay[1]]), int(marriedDay[0]))
+        famDict[famTag].Set_married(marriedDay)
+    if(element.get_tag()=="DIV" and element.get_level()==1):
+        isDivorced = True
+    if(isDivorced and element.get_tag()=="DATE" and element.get_level()==2):
+        isDivorced = False
+        divorcedDay = element.get_value()
+        divorcedDay = divorcedDay.split(" ")
+        divorcedDay = datetime.date(int(divorcedDay[2]),int(months[divorcedDay[1]]), int(divorcedDay[0]))
+        famDict[famTag].Set_divorced(divorcedDay)
+    if(element.get_level()==1 and element.get_tag()=="HUSB"):
+        husbStr = element.to_gedcom_string()
+        husbStr = husbStr.replace('@','').strip().split(" ")[2]
+        famDict[famTag].Set_husbandID(husbStr)
+        famDict[famTag].Set_husbandName(indiDict[husbStr].Get_name())
+    if(element.get_level()==1 and element.get_tag()=="WIFE"):
+        wifeStr = element.to_gedcom_string()
+        wifeStr = wifeStr.replace('@','').strip().split(" ")[2]
+        famDict[famTag].Set_wifeID(wifeStr)
+        famDict[famTag].Set_wifeName(indiDict[wifeStr].Get_name())
+    if(element.get_level()==1 and element.get_tag()=="CHIL"):
+        child = element.to_gedcom_string()
+        child = child.replace('@','').strip().split(" ")[2]
+        children.add(child)
+        famDict[famTag].Set_children(set(children))
+        
+            
 # Print Each Individual details
-printTablesIndiData(indiDict)
+printTablesIndiData(indiDict, famDict)
