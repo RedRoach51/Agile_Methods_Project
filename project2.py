@@ -46,16 +46,6 @@ gedcom_parser.parse_file(file_path)
 
 root_elements = gedcom_parser.get_element_list()
 
-# Iterate through allelements
-'''for element in root_elements:
-    if element.get_tag == "INDI" or element.get_tag == "FAM":
-        tag = "Y"
-    else:
-        tag = "N"
-
-    print ("-->" + str(element))
-    print ("<-- |" + str(element.get_level()) + "|" + (element.get_tag())+ "|" + tag+ "|" + str(element.get_value()) + "|")
-'''
 info = {"INDI": [], "FAM":[]}
 
 for element in root_elements:
