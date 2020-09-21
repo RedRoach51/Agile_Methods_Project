@@ -28,14 +28,15 @@ def printTablesIndiData(indiDict_obj, famDict_obj):
     for id in famDict_obj:
         famData = famDict_obj[id]
         familyTable.add_row(famData.Get_details())
-
+    print("Individuals")
     print (indiTable)
+    print("Families")
     print (familyTable)
 
 
 # Path to your `.ged` file
-#file_path ='FamilyTree.ged'
-file_path ='gedcom'
+file_path ='FamilyTree.ged'
+#file_path ='gedcom'
 
 # Initialize the parser
 gedcom_parser = Parser()
@@ -160,19 +161,19 @@ for element in root_elements:
         isMarried = True
         #print(isMarried)
     if(isMarried and element.get_tag()=="DATE" and element.get_level()==2):
-        isMarried = False
         marriedDay = element.get_value()
         marriedDay = marriedDay.split(" ")
         marriedDay = datetime.date(int(marriedDay[2]),int(months[marriedDay[1]]), int(marriedDay[0]))
         famDict[famTag].Set_married(marriedDay)
+        isMarried = False
     if(element.get_tag()=="DIV" and element.get_level()==1):
         isDivorced = True
     if(isDivorced and element.get_tag()=="DATE" and element.get_level()==2):
-        isDivorced = False
         divorcedDay = element.get_value()
         divorcedDay = divorcedDay.split(" ")
         divorcedDay = datetime.date(int(divorcedDay[2]),int(months[divorcedDay[1]]), int(divorcedDay[0]))
         famDict[famTag].Set_divorced(divorcedDay)
+        isDivorced = False
     if(element.get_level()==1 and element.get_tag()=="HUSB"):
         husbStr = element.to_gedcom_string()
         husbStr = husbStr.replace('@','').strip().split(" ")[2]
