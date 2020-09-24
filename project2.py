@@ -15,6 +15,9 @@ def from_dob_to_death(born,death):
     today = death
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
+def marriage_after_14(marriage_date, birth_date):
+    return (marriage_date - birth_date).days / 366 > 14
+
 
 def printTablesData(indiDict_obj, famDict_obj):
     indiTable = PrettyTable()

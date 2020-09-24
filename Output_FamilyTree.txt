@@ -19,7 +19,7 @@ Families
 +----+------------+------------+------------+----------------------------+---------+---------------------+--------------+
 | F1 | 1958-04-12 |     NA     |     I1     | Thomas Mapother III Cruise |    I2   |  Mary Lee Pfeiffer  |    {'I3'}    |
 | F2 | 1987-05-09 | 1990-02-04 |     I3     | Thomas Mapother IV Cruise  |    I4   |   Miriam Spickler   |      {}      |
-| F3 | 1990-12-24 | 2001-05-05 |     I3     | Thomas Mapother IV Cruise  |    I5   |  Nicole Mary Kidman | {'I8', 'I7'} |
+| F3 | 1990-12-24 | 2001-05-05 |     I3     | Thomas Mapother IV Cruise  |    I5   |  Nicole Mary Kidman | {'I7', 'I8'} |
 | F4 | 2006-11-18 | 2012-06-29 |     I3     | Thomas Mapother IV Cruise  |    I6   | Katie Noelle Holmes |    {'I9'}    |
 | F5 |     NA     |     NA     |     I3     | Thomas Mapother IV Cruise  |    NA   |          NA         |      {}      |
 | F6 | 1986-09-13 |     NA     |     I3     | Thomas Mapother IV Cruise  |   I10   |     Emily Random    |      {}      |
