@@ -11,12 +11,16 @@ import sys
 def from_dob_to_age(born):
     today = datetime.date.today()
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
 def from_dob_to_death(born,death):
     today = death
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 def marriage_after_14(marriage_date, birth_date):
-    return (marriage_date - birth_date).days / 366 > 14
+    if float((marriage_date - birth_date).days / 365) < 14:
+        raise ValueError(f"{marriage_date} is not more than 14 years after {birth_date}")
+    else:
+        return True
 
 
 def printTablesData(indiDict_obj, famDict_obj):
@@ -143,13 +147,17 @@ for element in root_elements:
             # Set Age
             indiDict[myTag].Set_age(age)
 
+    #Get family information
     if(element.get_level() == 0 and element.get_tag() == "FAM"):
         children = set()
         familyString = element.to_gedcom_string()
         familyString = familyString.replace('@','').strip().split(" ")
+        #Set family ID
         famTag = familyString[1]
         famDict[famTag] = familyClass(famTag)
         famDict[famTag].Set_ID(famTag)
+
+    #Set married date if marriage happened
     if(element.get_level() == 1 and element.get_tag() == "MARR"):
         isMarried = True
     if(isMarried and element.get_tag()=="DATE" and element.get_level()==2):
@@ -158,6 +166,8 @@ for element in root_elements:
         marriedDay = datetime.date(int(marriedDay[2]),int(months[marriedDay[1]]), int(marriedDay[0]))
         famDict[famTag].Set_married(marriedDay)
         isMarried = False
+
+    #Set divorced date if divorce happened 
     if(element.get_tag()=="DIV" and element.get_level()==1):
         isDivorced = True
     if(isDivorced and element.get_tag()=="DATE" and element.get_level()==2):
@@ -166,24 +176,42 @@ for element in root_elements:
         divorcedDay = datetime.date(int(divorcedDay[2]),int(months[divorcedDay[1]]), int(divorcedDay[0]))
         famDict[famTag].Set_divorced(divorcedDay)
         isDivorced = False
+
+    #Set Husband Name and ID
     if(element.get_level()==1 and element.get_tag()=="HUSB"):
         husbStr = element.to_gedcom_string()
         husbStr = husbStr.replace('@','').strip().split(" ")[2]
         famDict[famTag].Set_husbandID(husbStr)
         famDict[famTag].Set_husbandName(indiDict[husbStr].Get_name())
+
+    #Set Wife Name and ID
     if(element.get_level()==1 and element.get_tag()=="WIFE"):
         wifeStr = element.to_gedcom_string()
         wifeStr = wifeStr.replace('@','').strip().split(" ")[2]
         famDict[famTag].Set_wifeID(wifeStr)
         famDict[famTag].Set_wifeName(indiDict[wifeStr].Get_name())
+
+    #Set children 
     if(element.get_level()==1 and element.get_tag()=="CHIL"):
         child = element.to_gedcom_string()
         child = child.replace('@','').strip().split(" ")[2]
         children.add(child)
         famDict[famTag].Set_children(set(children))
-
+        
 # Output the results
 sys.stdout = open("Output_FamilyTree.txt", "w")
+#check for age after 14 for a marriage
+for family in famDict.keys():
+    if famDict[family].Get_married() != "NA":
+        husband = famDict[family].Get_husbandID()
+        wife = famDict[family].Get_wifeID()
+        family_marriage_date = famDict[family].Get_married()
+        try:
+            marriage_after_14(family_marriage_date, indiDict[husband].Get_birthday())
+            marriage_after_14(family_marriage_date, indiDict[wife].Get_birthday())
+        except ValueError as e:
+            print(e)
+
 # Print Each Individual details
 printTablesData(indiDict, famDict)
 sys.stdout.close()
