@@ -179,6 +179,16 @@ for element in root_elements:
         children.add(child)
         famDict[famTag].Set_children(set(children))
 
+def Story05(indiDict, famDict):
+    if (famDict['MARR']!='N/A' and indiDict['DEAT']!='N/A'):
+        for val in indiDict['FAMS']:
+            if(fam['ID']==val):
+                datetime.strptime(indiDict['DEAT'], '%d %b %Y')
+                datetime.strptime(famDict['MARR'], '%d %b %Y')
+                if(death<married):
+                    return False
+                return True
+
 # Output the results
 sys.stdout = open("Output_FamilyTree.txt", "w")
 # Print Each Individual details
