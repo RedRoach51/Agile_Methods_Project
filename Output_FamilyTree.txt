@@ -1,10 +1,9 @@
-1958-04-12 is not more than 14 years after 1946-09-22
 Individuals
 +-----+----------------------------+--------+------------+-----+-------+------------+--------+--------------------------------+
 |  ID |            Name            | Gender |  Birthday  | Age | Alive |   Death    | Child  |             Spouse             |
 +-----+----------------------------+--------+------------+-----+-------+------------+--------+--------------------------------+
 |  I1 | Thomas Mapother III Cruise |   M    | 1934-10-13 |  49 | False | 1984-01-09 |   NA   |             ['F1']             |
-|  I2 |     Mary Lee Pfeiffer      |   F    | 1946-09-22 |  70 | False | 2017-02-09 |   NA   |             ['F1']             |
+|  I2 |     Mary Lee Pfeiffer      |   F    | 1936-09-22 |  80 | False | 2017-02-09 |   NA   |             ['F1']             |
 |  I3 | Thomas Mapother IV Cruise  |   M    | 1962-07-03 |  58 |  True |     NA     | ['F1'] | ['F2', 'F3', 'F4', 'F5', 'F6'] |
 |  I4 |      Miriam Spickler       |   F    | 1956-01-27 |  64 |  True |     NA     |   NA   |             ['F2']             |
 |  I5 |     Nicole Mary Kidman     |   F    | 1967-06-20 |  53 |  True |     NA     |   NA   |             ['F3']             |
@@ -20,7 +19,7 @@ Families
 +----+------------+------------+------------+----------------------------+---------+---------------------+--------------+
 | F1 | 1958-04-12 |     NA     |     I1     | Thomas Mapother III Cruise |    I2   |  Mary Lee Pfeiffer  |    {'I3'}    |
 | F2 | 1987-05-09 | 1990-02-04 |     I3     | Thomas Mapother IV Cruise  |    I4   |   Miriam Spickler   |      {}      |
-| F3 | 1990-12-24 | 2001-05-05 |     I3     | Thomas Mapother IV Cruise  |    I5   |  Nicole Mary Kidman | {'I8', 'I7'} |
+| F3 | 1990-12-24 | 2001-05-05 |     I3     | Thomas Mapother IV Cruise  |    I5   |  Nicole Mary Kidman | {'I7', 'I8'} |
 | F4 | 2006-11-18 | 2012-06-29 |     I3     | Thomas Mapother IV Cruise  |    I6   | Katie Noelle Holmes |    {'I9'}    |
 | F5 |     NA     |     NA     |     I3     | Thomas Mapother IV Cruise  |    NA   |          NA         |      {}      |
 | F6 | 1986-09-13 |     NA     |     I3     | Thomas Mapother IV Cruise  |   I10   |     Emily Random    |      {}      |

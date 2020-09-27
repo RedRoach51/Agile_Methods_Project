@@ -1,5 +1,5 @@
 import unittest 
-from project2 import marriage_after_14
+from project2 import marriage_after_14, main
 import datetime
 
 class MarriageAfter14Test(unittest.TestCase):
@@ -8,32 +8,31 @@ class MarriageAfter14Test(unittest.TestCase):
     """ Test the marriage_after_14 function from US10 """
 
 
-    #create some birthdays
-    birth_date_one = datetime.datetime.strptime("1990-08-01", "%Y-%m-%d")
-    birth_date_two = datetime.datetime.strptime("2000-08-01", "%Y-%m-%d")
-    birth_date_three = datetime.datetime.strptime("2001-08-01", "%Y-%m-%d")
-
-    #create some marriages 
-    marriage_date_one = datetime.datetime.strptime("2014-08-01", "%Y-%m-%d")
-    marriage_date_two = datetime.datetime.strptime("2014-08-02", "%Y-%m-%d")
-
     def test_marriage_after_14_errors(self):
 
         """ Test the error catching of marriage_after_14 """
 
-        with self.assertRaises(ValueError):
-            marriage_after_14(MarriageAfter14Test.marriage_date_one, MarriageAfter14Test.birth_date_three)
+        #create gedcom files where there are marriages before 14
+        individuals_1, families_1 = main('FamilyTree_Test_Under14.ged')
+        individuals_2, families_2 = main('FamilyTree_Test_JustUnder14.ged')
 
+        with self.assertRaises(ValueError):
+            marriage_after_14(individuals_1, families_1) 
+        with self.assertRaises(ValueError):
+            marriage_after_14(individuals_2, families_2)
+    
     def test_marriage_after_14_no_errors(self):
 
-        """ Test the inputs of the marriage_after_14 function """
+        """ Test the functionality of marriage_after_14 """
 
-        self.assertTrue(marriage_after_14(MarriageAfter14Test.marriage_date_one, MarriageAfter14Test.birth_date_two))
-        self.assertTrue(marriage_after_14(MarriageAfter14Test.marriage_date_one, MarriageAfter14Test.birth_date_one))
-        self.assertTrue(marriage_after_14(MarriageAfter14Test.marriage_date_two, MarriageAfter14Test.birth_date_one))
-        self.assertTrue(marriage_after_14(MarriageAfter14Test.marriage_date_two, MarriageAfter14Test.birth_date_two))
+        #create gedcom files where marriages are on or after 14 
+        individuals_3, families_3 = main('FamilyTree.ged')
+        individuals_4, families_4 = main('FamilyTree_Test_Equals14.ged')
+        individuals_5, families_5 = main('FamilyTree_Test_JustOver14.ged')
 
-
-
+        self.assertTrue(marriage_after_14(individuals_3, families_3))
+        self.assertTrue(marriage_after_14(individuals_4, families_4))
+        self.assertTrue(marriage_after_14(individuals_5, families_5))
+            
 if __name__ == "__main__":
-    unittest.main(exit=False, verbosity=2)
+    unittest.main()
