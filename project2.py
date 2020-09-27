@@ -18,7 +18,7 @@ def from_dob_to_death(born,death):
 
 def marriage_after_14(marriage_date, birth_date):
     if float((marriage_date - birth_date).days / 365) < 14:
-        raise ValueError(f"{marriage_date} is not more than 14 years after {birth_date}")
+        raise ValueError(f"{marriage_date} is not at least 14 years after {birth_date}")
     else:
         return True
 
